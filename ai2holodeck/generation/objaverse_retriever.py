@@ -1,5 +1,5 @@
 import os
-import open_clip
+
 import compress_json
 import compress_pickle
 import numpy as np
@@ -71,8 +71,9 @@ class ObjathorRetriever:
 
         self.asset_ids = objathor_uids + thor_uids
 
-        self.clip_model, _, self.clip_preprocess = open_clip.create_model_and_transforms("ViT-B-32", pretrained="laion2b_s34b_b79k")
-        self.clip_tokenizer = open_clip.get_tokenizer("ViT-B-32")
+        self.clip_model = clip_model
+        self.clip_preprocess = clip_preprocess
+        self.clip_tokenizer = clip_tokenizer
         self.sbert_model = sbert_model
 
         self.retrieval_threshold = retrieval_threshold
