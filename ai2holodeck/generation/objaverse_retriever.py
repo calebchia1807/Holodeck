@@ -1,5 +1,5 @@
 import os
-
+import open_clip
 import compress_json
 import compress_pickle
 import numpy as np
@@ -71,9 +71,8 @@ class ObjathorRetriever:
 
         self.asset_ids = objathor_uids + thor_uids
 
-        self.clip_model = clip_model
-        self.clip_preprocess = clip_preprocess
-        self.clip_tokenizer = clip_tokenizer
+        self.clip_model, _, self.clip_preprocess = open_clip.create_model_and_transforms("ViT-B-32", pretrained="laion2b_s34b_b79k")
+        self.clip_tokenizer = open_clip.get_tokenizer("ViT-B-32")
         self.sbert_model = sbert_model
 
         self.retrieval_threshold = retrieval_threshold
@@ -81,39 +80,55 @@ class ObjathorRetriever:
         self.use_text = True
 
     def retrieve(self, queries, threshold=28):
+        print(f"Retrieving for queries: {queries}")
+
         with torch.no_grad():
+            print(queries)
             query_feature_clip = self.clip_model.encode_text(
                 self.clip_tokenizer(queries)
             )
+            print("CLIP text encoding done")
 
             query_feature_clip = F.normalize(query_feature_clip, p=2, dim=-1)
+            print("Normalization done")
 
         clip_similarities = 100 * torch.einsum(
             "ij, lkj -> ilk", query_feature_clip, self.clip_features
         )
+        print("CLIP similarity computed")
+
         clip_similarities = torch.max(clip_similarities, dim=-1).values
+        print("Max similarity computed")
 
         query_feature_sbert = self.sbert_model.encode(
             queries, convert_to_tensor=True, show_progress_bar=False
         )
+        print("SBERT encoding done")
+
         sbert_similarities = query_feature_sbert @ self.sbert_features.T
+        print("SBERT similarity computed")
 
         if self.use_text:
             similarities = clip_similarities + sbert_similarities
         else:
             similarities = clip_similarities
+        print("Final similarity computed")
 
         threshold_indices = torch.where(clip_similarities > threshold)
+        print(f"Threshold filtering done, found {len(threshold_indices[0])} candidates")
 
         unsorted_results = []
         for query_index, asset_index in zip(*threshold_indices):
             score = similarities[query_index, asset_index].item()
             unsorted_results.append((self.asset_ids[asset_index], score))
 
-        # Sorting the results in descending order by score
+        print(f"Retrieved {len(unsorted_results)} results before sorting")
+
         results = sorted(unsorted_results, key=lambda x: x[1], reverse=True)
+        print("Sorting done")
 
         return results
+
 
     def compute_size_difference(self, target_size, candidates):
         candidate_sizes = []
