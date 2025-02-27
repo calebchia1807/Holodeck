@@ -193,28 +193,28 @@ class SmallObjectGenerator:
         capacity = 0
         num_objects = 0
         sorted(receptacle_size)
-        print("1")
+
         for small_object in small_objects:
             object_name, quantity, variance_type = (
                 small_object["object_name"],
                 small_object["quantity"],
                 small_object["variance_type"],
             )
-            print("2")
+
             quantity = min(quantity, 5)  # maximum 5 objects per receptacle
             print(f"Selecting {quantity} {object_name} for {receptacle}")
             # Select the object
-            print("3")
+
             candidates = self.object_retriever.retrieve(
                 [f"a 3D model of {object_name}"], self.clip_threshold
             )
-            print("4")
+
             candidates = [
                 candidate
                 for candidate in candidates
                 if get_annotations(self.database[candidate[0]])["onObject"] == True
             ]  # Only select objects that can be placed on other objects
-            print("5")
+
             valid_candidates = []  # Only select objects with high confidence
 
             for candidate in candidates:
