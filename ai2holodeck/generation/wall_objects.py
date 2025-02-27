@@ -41,6 +41,7 @@ class WallObjectGenerator:
         self.grid_size = 25
         self.default_height = 150
         self.constraint_type = "llm"
+        self.multiprocessing = False
 
     def generate_wall_objects(self, scene, use_constraint=True):
         doors = scene["doors"]
@@ -64,10 +65,15 @@ class WallObjectGenerator:
             )
             for room in scene["rooms"]
         ]
-        pool = multiprocessing.Pool(processes=4)
-        all_placements = pool.map(self.generate_wall_objects_per_room, packed_args)
-        pool.close()
-        pool.join()
+
+        if self.multiprocessing:
+            pool = multiprocessing.Pool(processes=4)
+            all_placements = pool.map(self.generate_wall_objects_per_room, packed_args)
+            pool.close()
+            pool.join()
+        else:
+            all_placements = [self.generate_wall_objects_per_room(args) for args in packed_args]
+        
 
         for placements in all_placements:
             wall_objects += placements
