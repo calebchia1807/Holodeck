@@ -1,0 +1,70 @@
+TO GENERATE RUN HOLODECK
+------------------------
+**Ubuntu 20.04 is required
+
+1. Open <Software & Updates (blue)>, go to under <Additional Drivers> and configure it to <Using NVIDIA driver .... (proprietary, tested)>
+
+
+2. Clone the Holodeck repo
+git clone https://github.com/allenai/Holodeck.git
+
+
+3. Install dependencies
+conda create --name holodeck python=3.10
+conda activate holodeck
+pip3 install -r requirements.txt
+pip3 install --extra-index-url https://ai2thor-pypi.allenai.org ai2thor==0+8524eadda94df0ab2dbb2ef5a577e4d37c712897
+
+
+4. Download Data
+python -m objathor.dataset.download_holodeck_base_data --version 2023_09_23
+python -m objathor.dataset.download_assets --version 2023_09_23
+python -m objathor.dataset.download_annotations --version 2023_09_23
+python -m objathor.dataset.download_features --version 2023_09_23
+
+
+5. Resolve dependencies error (not on holodeck git repo site)
+(1) copy and paste main.py to /Home/Desktop/Holodeck from /Home/Desktop/Holodeck/ai2holodeck
+(2) Run:
+	pip3 install --upgrade torch
+	pip3 install moviepy==1.0.3
+	pip3 install --upgrade torchvision
+	ulimit -n 10000	(increase number of files to 10000 to be allowed for opening)
+
+	// ulimit -n	(to check the number of files allowed to open)
+	
+(3) multiprocessing has errors in small objects & wall and overall!
+
+
+6. Run holodeck (differ slightly)
+python holodeck/main.py --query "a living room" --openai_api_key <OPENAI_API_KEY>
+
+
+7. Load the scene in Unity by running:
+	git clone https://github.com/allenai/ai2thor.git
+	git checkout 07445be8e91ddeb5de2915c90935c4aef27a241d
+	pip uninstall Werkzeug
+	pip uninstall Flask
+	pip install Werkzeug==2.0.1
+	pip install Flask==2.0.1
+
+	Load ai2thor/unity as project in Unity and open ai2thor/unity/Assets/Scenes/Procedural/Procedural.unity
+
+	python connect_to_unity --scene <SCENE_JSON_FILE_PATH>
+
+
+----------------------------------------------------------------------------------------------
+Changes in code
+1. object_selector.py	-> line 63: self.multiprocessing = False
+
+----------------------------------------------------------------------------------------------
+** conda
+conda info	-> to check conda installed packages and versions
+
+
+** to check NVIDIA GPU
+sudo apt install nvidia-cuda-toolkit	-> install nvidia toolkit
+nvidia-smi				-> sth like htop but for GPU
+watch -n1 nvidia-smi    		-> to update nvidia-smi every second
+lspci | grep -i nvidia			-> to see what GPU is available
+nvcc --version				-> to check nvidia cuda compiler version
