@@ -54,10 +54,6 @@ python holodeck/main.py --query "a living room" --openai_api_key <OPENAI_API_KEY
 
 
 ----------------------------------------------------------------------------------------------
-Changes in code
-1. object_selector.py	-> line 63: self.multiprocessing = False
-
-----------------------------------------------------------------------------------------------
 ** conda
 conda info	-> to check conda installed packages and versions
 
