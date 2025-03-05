@@ -60,7 +60,7 @@ conda info	-> to check conda installed packages and versions
 
 ** to check NVIDIA GPU
 sudo apt install nvidia-cuda-toolkit	-> install nvidia toolkit
-nvidia-smi				-> sth like htop but for GPU
-watch -n1 nvidia-smi    		-> to update nvidia-smi every second
-lspci | grep -i nvidia			-> to see what GPU is available
-nvcc --version				-> to check nvidia cuda compiler version
+nvidia-smi								-> sth like htop but for GPU
+watch -n1 nvidia-smi    				-> to update nvidia-smi every second
+lspci | grep -i nvidia					-> to see what GPU is available
+nvcc --version							-> to check nvidia cuda compiler version
