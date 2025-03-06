@@ -1,6 +1,7 @@
 TO GENERATE RUN HOLODECK
 ------------------------
 **Ubuntu 20.04 is required
+**unable to create multi-story scenes
 
 1. Open <Software & Updates (blue)>, go to under <Additional Drivers> and configure it to <Using NVIDIA driver .... (proprietary, tested)>
 
