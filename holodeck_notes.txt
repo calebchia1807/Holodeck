@@ -1,7 +1,7 @@
 TO GENERATE RUN HOLODECK
 ------------------------
 **Ubuntu 20.04 is required
-**unable to create multi-story scenes
+**Unable to create multi-story scenes
 
 1. Open <Software & Updates (blue)>, go to under <Additional Drivers> and configure it to <Using NVIDIA driver .... (proprietary, tested)>
 
@@ -17,7 +17,7 @@ pip3 install -r requirements.txt
 pip3 install --extra-index-url https://ai2thor-pypi.allenai.org ai2thor==0+8524eadda94df0ab2dbb2ef5a577e4d37c712897
 
 
-4. Download Data
+4. Download Data (Can get the data from CT harddisk too)
 python -m objathor.dataset.download_holodeck_base_data --version 2023_09_23
 python -m objathor.dataset.download_assets --version 2023_09_23
 python -m objathor.dataset.download_annotations --version 2023_09_23
@@ -55,13 +55,14 @@ python holodeck/main.py --query "a living room" --openai_api_key <OPENAI_API_KEY
 
 
 ----------------------------------------------------------------------------------------------
-** conda
-conda info	-> to check conda installed packages and versions
+Unity
+- unable to use unity's ros tcp
 
 
+----------------------------------------------------------------------------------------------
 ** to check NVIDIA GPU
 sudo apt install nvidia-cuda-toolkit	-> install nvidia toolkit
-nvidia-smi								-> sth like htop but for GPU
-watch -n1 nvidia-smi    				-> to update nvidia-smi every second
-lspci | grep -i nvidia					-> to see what GPU is available
-nvcc --version							-> to check nvidia cuda compiler version
+nvidia-smi				-> sth like htop but for GPU
+watch -n1 nvidia-smi    		-> to update nvidia-smi every second
+lspci | grep -i nvidia			-> to see what GPU is available
+nvcc --version				-> to check nvidia cuda compiler version
