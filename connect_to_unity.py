@@ -49,4 +49,4 @@ controller = Controller(
 
 
 controller.step(action="CreateHouse", house=scene)
-print("controller reset")
+print("Controller initialized and house created.")
