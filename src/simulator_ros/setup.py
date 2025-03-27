@@ -15,8 +15,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'keyboard_control = simulator_ros.keyboard_control:main',
             'unity_agent_controller = simulator_ros.unity_agent_controller:main',
+            'unity_agent_publisher  = simulator_ros.unity_agent_publisher:main',
         ],
     },
 )
