@@ -45,34 +45,26 @@ def main():
     )
 
     controller.step(action="CreateHouse", house=scene)
-    print(f"Scene initialized.")
-    print(f"Run python3 unity_agent_controller.py to control motion")
+    print(f"Scene initialized. Run ROS modules to interact with scene!")
     
-    # Set up socket server
+    # connection with other ROS scripts
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # This allows address reuse
     server_socket.bind(('localhost', 8888))
     server_socket.listen()
-    print("Waiting for movement commands... (Ctrl+C to exit)")
+    print("Waiting for commands...")
 
     try:
         while True:
-            conn, addr = server_socket.accept()
-            with conn:
-                data = conn.recv(1024).decode().strip()
+            client_socket, addr = server_socket.accept()
+            with client_socket:
+                cmd = client_socket.recv(1024).decode()
+                controller.step(action=cmd)
+                print(f"Command received: {cmd}")
                 
-                if data == 'w':
-                    res = controller.step("MoveAhead", moveMagnitude=0.25)
-                elif data == 'a':
-                    res = controller.step("MoveLeft", moveMagnitude=0.25)
-                elif data == 's':
-                    res = controller.step("MoveBack", moveMagnitude=0.25)
-                elif data == 'd':
-                    res = controller.step("MoveRight", moveMagnitude=0.25)
-                
-                conn.sendall(b"OK")
     except KeyboardInterrupt:
-        print("\nShutting down server...")
+        client_socket.close()
+        server_socket.close()
+        print("Shutting down server...")
 
 if __name__ == "__main__":
     main()
