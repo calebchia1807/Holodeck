@@ -62,7 +62,7 @@ def main():
                     command = client_socket.recv(1024).decode()
                     command_dict = json.loads(command)
                     controller.step(**command_dict)
-            except ValueError:
+            except ValueError or TypeError:
                 print("Invalid command!")
 
     except KeyboardInterrupt:
