@@ -2,6 +2,7 @@
 
 import socket
 import json
+import math
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
@@ -27,49 +28,44 @@ class UnityNav(Node):
         angular_y = msg.angular.y   # pitch
         angular_z = msg.angular.z   # rotate left / right - yaw
 
-        # timestep = 0.02
-        # move_magnitude = 0.01
-
-        # commands = []
-
-        timestep = 0.02
-        distance_to_travel = abs(linear_y)
-        move_magnitude = distance_to_travel / 1 * timestep
-
         commands = []
+        timestep = 0.02        
+
+        # move forward & backward
         if linear_y != 0:
-            distance_travelled = abs(linear_y)
-            steps = int(distance_travelled / move_magnitude)
-
-            for i in range(steps):
+            distance_y = abs(linear_y)
+            move_magnitude_y = distance_y / 1 * timestep
+            steps_linear_y = int(distance_y / move_magnitude_y)
+            
+            for i in range(steps_linear_y):
                 if linear_y > 0:
-                    commands.append({"action": "MoveAhead", "moveMagnitude": move_magnitude})
+                    commands.append({"action": "MoveAhead", "moveMagnitude": move_magnitude_y})
                 elif linear_y < 0:
-                    commands.append({"action": "MoveBack", "moveMagnitude": move_magnitude})
+                    commands.append({"action": "MoveBack", "moveMagnitude": move_magnitude_y})
 
-        # if linear_y != 0:
-        #     distance_travelled = abs(linear_y)*timestep
-        #     steps = int(distance_travelled/move_magnitude)
-        #     for i in range(steps):   
-        #         if linear_y > 0:
-        #             commands.append({"action": "MoveAhead", "moveMagnitude": move_magnitude})
-        #         elif linear_y < 0:
-        #             commands.append({"action": "MoveBack", "moveMagnitude": move_magnitude})
+        # move left & right
+        if linear_x != 0:
+            distance_x = abs(linear_x)  
+            move_magnitude_x = distance_x / 1 * timestep
+            steps_linear_x = int(distance_x / move_magnitude_x)
 
-        # if linear_y > 0:
-        #     commands.append({"action": "MoveAhead", "moveMagnitude": abs(linear_y)})
-        # elif linear_y < 0:
-        #     commands.append({"action": "MoveBack", "moveMagnitude": abs(linear_y)})
+            for i in range(steps_linear_x):
+                if linear_x > 0:
+                    commands.append({"action": "MoveRight", "moveMagnitude": move_magnitude_x})
+                elif linear_x < 0:
+                    commands.append({"action": "MoveLeft", "moveMagnitude": move_magnitude_x})
 
-        # if linear_x > 0:
-        #     commands.append({"action": "MoveRight", "moveMagnitude": abs(linear_x)})
-        # elif linear_x < 0:
-        #     commands.append({"action": "MoveLeft", "moveMagnitude": abs(linear_x)})
+        # rotate left & right (user to ros2 topic pub in degrees/s for angular_z)   --> CAN CHANGE TO RAD/S IF NEEDED!!!
+        if angular_z != 0:
+            angle_rotated_z = abs(angular_z)
+            rotate_magnitude_z = angle_rotated_z / 1 * timestep 
+            steps_angular_z = int(angle_rotated_z / rotate_magnitude_z)
 
-        # if angular_z > 0:
-        #     commands.append({"action": "RotateLeft", "degrees": abs(angular_z)})
-        # elif angular_z < 0:
-        #     commands.append({"action": "RotateRight", "degrees": abs(angular_z)})
+            for i in range(steps_angular_z):
+                if angular_z > 0:
+                    commands.append({"action": "RotateLeft", "degrees": rotate_magnitude_z})
+                elif angular_z < 0:
+                    commands.append({"action": "RotateRight", "degrees": rotate_magnitude_z})
 
         if commands:
             for command in commands:
