@@ -5,9 +5,9 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 
-class UnityController(Node):
+class UnityKeyboard(Node):
     def __init__(self):
-        super().__init__('unity_controller')
+        super().__init__('unity_keyboard')
     
         self.subscription = self.create_subscription(
             Twist, 
@@ -18,7 +18,7 @@ class UnityController(Node):
 
         self.height_checker = True  # True = Standing, False = Crouching
 
-        self.get_logger().info('Starting Unity Controller Node')
+        self.get_logger().info('Starting Unity Keyboard Node')
 
     def cmd_vel_callback(self, msg):
         linear_x = msg.linear.x
@@ -76,7 +76,7 @@ class UnityController(Node):
 def main(args=None):
     try:
         rclpy.init(args=args)
-        node = UnityController()
+        node = UnityKeyboard()
         rclpy.spin(node)
         node.destroy_node()
         rclpy.shutdown()
