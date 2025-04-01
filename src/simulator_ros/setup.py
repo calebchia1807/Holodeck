@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'unity_controller = simulator_ros.unity_controller:main'
+            'unity_keyboard = simulator_ros.unity_keyboard:main',
+            'unity_nav      = simulator_ros.unity_nav:main',
         ],
     },
 )

@@ -1,5 +1,6 @@
 import os
 import socket
+import json
 from argparse import ArgumentParser
 
 import ai2thor
@@ -31,7 +32,7 @@ def main():
         start_unity=False,
         port=8200,
         scene="Procedural",
-        gridSize=0.25,
+        gridSize=0.001,
         width=300,
         height=300,
         server_class=ai2thor.wsgi_server.WsgiServer,
@@ -46,7 +47,7 @@ def main():
 
     controller.step(action="CreateHouse", house=scene)
     print(f"Scene initialized. Run ROS modules to interact with scene!")
-    
+
     # connection with other ROS scripts
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind(('localhost', 8888))
@@ -56,11 +57,14 @@ def main():
     try:
         while True:
             client_socket, addr = server_socket.accept()
-            with client_socket:
-                cmd = client_socket.recv(1024).decode()
-                controller.step(action=cmd)
-                print(f"Command received: {cmd}")
-                
+            try:
+                with client_socket:
+                    command = client_socket.recv(1024).decode()
+                    command_dict = json.loads(command)
+                    controller.step(**command_dict)
+            except ValueError:
+                print("Invalid command!")
+
     except KeyboardInterrupt:
         client_socket.close()
         server_socket.close()
