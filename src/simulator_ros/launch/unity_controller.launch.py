@@ -1,0 +1,18 @@
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        Node(
+            package='simulator_ros',
+            executable='unity_nav',
+            output='screen',
+            emulate_tty=True,
+        ),
+        Node(
+            package='simulator_ros',
+            executable='unity_stand_crouch',
+            output='screen',
+            emulate_tty=True,
+        ),
+    ])

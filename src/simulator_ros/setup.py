@@ -1,3 +1,5 @@
+import os
+import glob
 from setuptools import find_packages, setup
 
 package_name = 'simulator_ros'
@@ -10,6 +12,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name), glob.glob('launch/*.launch.py'))
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -20,8 +23,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'unity_keyboard = simulator_ros.unity_keyboard:main',
-            'unity_nav      = simulator_ros.unity_nav:main',
+            'unity_keyboard     = simulator_ros.unity_keyboard:main',
+            'unity_nav          = simulator_ros.unity_nav:main',
+            'unity_stand_crouch = simulator_ros.unity_stand_crouch:main',
         ],
     },
 )

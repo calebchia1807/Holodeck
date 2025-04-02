@@ -18,7 +18,7 @@ class UnityNav(Node):
             10)
         self.subscription
 
-        self.get_logger().info('Starting Unity Nav Node')
+        self.get_logger().info('Starting unity_nav ROS node')
 
     def cmd_vel_callback(self, msg):
         linear_x = msg.linear.x     # left / right
@@ -67,7 +67,7 @@ class UnityNav(Node):
 
         # look up & down
         if angular_x != 0:
-            # angle_rotated_z = abs(math.degrees(angular_x))    # angular_x in radians
+            # angle_rotated_z = abs(math.degrees(angular_x))    # angular_x in radians - conversion needed as the command sent need to be in degrees!!!
             angle_rotated_x = abs(angular_x)                    # angular_x in degrees
             rotate_magnitude_x = angle_rotated_x / 1 * timestep 
             steps_angular_x = int(angle_rotated_x / rotate_magnitude_x)
@@ -86,7 +86,7 @@ class UnityNav(Node):
                 elif angular_x < 0:
                     commands.append({"action": "LookDown", "degrees": rotate_magnitude_x})
 
-        # rotate left & right
+        # rotate left & right (range btw -30 degrees to 30 degrees only)
         if angular_z != 0:
             # angle_rotated_z = abs(math.degrees(angular_z))    # angular_z in radians
             angle_rotated_z = abs(angular_z)                    # angular_z in degrees
