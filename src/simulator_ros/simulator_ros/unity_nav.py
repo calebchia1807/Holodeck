@@ -21,8 +21,8 @@ class UnityNav(Node):
         self.get_logger().info('Starting unity_nav ROS node')
 
     def cmd_vel_callback(self, msg):
-        linear_x = msg.linear.x     # left / right
-        linear_y = msg.linear.y     # front / back
+        linear_x = msg.linear.x     # front / back
+        linear_y = msg.linear.y     # left / right
         linear_z = msg.linear.z     # NA
         angular_x = msg.angular.x   # look up / down - row
         angular_y = msg.angular.y   # NA - pitch
@@ -31,52 +31,52 @@ class UnityNav(Node):
         commands = []
         timestep = 0.02        
 
-        # move left & right
+        # move forward & backward
         if linear_x != 0:
-            distance_x = abs(linear_x)  
-            move_magnitude_x = distance_x / 1 * timestep
-            steps_linear_x = int(distance_x / move_magnitude_x)
+            velocity_x = abs(linear_x)
+            move_magnitude_x = velocity_x / 1 * timestep
+            steps_linear_x = int(velocity_x / move_magnitude_x)
 
             if linear_x > 0:
-                self.get_logger().info(f"Moving Right @ {distance_x} m/s")
+                self.get_logger().info(f"Moving Ahead @ {velocity_x} m/s")
             elif linear_x < 0:
-                self.get_logger().info(f"Moving Left @ {distance_x} m/s")
+                self.get_logger().info(f"Moving Back @ {velocity_x} m/s")
     
             for i in range(steps_linear_x):
                 if linear_x > 0:
-                    commands.append({"action": "MoveRight", "moveMagnitude": move_magnitude_x})
+                    commands.append({"action": "MoveAhead", "moveMagnitude": move_magnitude_x})
                 elif linear_x < 0:
-                    commands.append({"action": "MoveLeft", "moveMagnitude": move_magnitude_x})
+                    commands.append({"action": "MoveBack", "moveMagnitude": move_magnitude_x})
 
-        # move forward & backward
+        # move left & right
         if linear_y != 0:
-            distance_y = abs(linear_y)
-            move_magnitude_y = distance_y / 1 * timestep
-            steps_linear_y = int(distance_y / move_magnitude_y)
+            velocity_y = abs(linear_y)
+            move_magnitude_y = velocity_y / 1 * timestep
+            steps_linear_y = int(velocity_y / move_magnitude_y)
             
             if linear_y > 0:
-                self.get_logger().info(f"Moving Ahead @ {distance_y} m/s")
+                self.get_logger().info(f"Moving Right @ {velocity_y} m/s")
             elif linear_y < 0:
-                self.get_logger().info(f"Moving Back @ {distance_y} m/s")
+                self.get_logger().info(f"Moving Left @ {velocity_y} m/s")
             
             for i in range(steps_linear_y):
                 if linear_y > 0:
-                    commands.append({"action": "MoveAhead", "moveMagnitude": move_magnitude_y})
+                    commands.append({"action": "MoveRight", "moveMagnitude": move_magnitude_y})
                 elif linear_y < 0:
-                    commands.append({"action": "MoveBack", "moveMagnitude": move_magnitude_y})
+                    commands.append({"action": "MoveLeft", "moveMagnitude": move_magnitude_y})
 
         # look up & down
         if angular_x != 0:
-            # angle_rotated_z = abs(math.degrees(angular_x))    # angular_x in radians - conversion needed as the command sent need to be in degrees!!!
-            angle_rotated_x = abs(angular_x)                    # angular_x in degrees
-            rotate_magnitude_x = angle_rotated_x / 1 * timestep 
-            steps_angular_x = int(angle_rotated_x / rotate_magnitude_x)
+            # angle_velocity_x = abs(math.degrees(angular_x))    # angular_x in radians - conversion needed as the command sent need to be in degrees!!!
+            angle_velocity_x = abs(angular_x)                    # angular_x in degrees
+            rotate_magnitude_x = angle_velocity_x / 1 * timestep 
+            steps_angular_x = int(angle_velocity_x / rotate_magnitude_x)
 
             if angular_x > 0:
-                self.get_logger().info(f"Looking up @ {angle_rotated_x} degrees/s")
+                self.get_logger().info(f"Looking up @ {angle_velocity_x} degrees/s")
                 #self.get_logger().info(f"Looking up @ {abs(angular_x)} rad/s")
             elif angular_x < 0:
-                self.get_logger().info(f"Looking down @ {angle_rotated_x} degrees/s")
+                self.get_logger().info(f"Looking down @ {angle_velocity_x} degrees/s")
                 #self.get_logger().info(f"Looking down @ {abs(angular_x)} rad/s")
 
 
@@ -88,16 +88,16 @@ class UnityNav(Node):
 
         # rotate left & right (range btw -30 degrees to 30 degrees only)
         if angular_z != 0:
-            # angle_rotated_z = abs(math.degrees(angular_z))    # angular_z in radians
-            angle_rotated_z = abs(angular_z)                    # angular_z in degrees
-            rotate_magnitude_z = angle_rotated_z / 1 * timestep 
-            steps_angular_z = int(angle_rotated_z / rotate_magnitude_z)
+            # angle_velocity_z = abs(math.degrees(angular_z))    # angular_z in radians
+            angle_velocity_z = abs(angular_z)                    # angular_z in degrees
+            rotate_magnitude_z = angle_velocity_z / 1 * timestep 
+            steps_angular_z = int(angle_velocity_z / rotate_magnitude_z)
 
             if angular_z > 0:
-                self.get_logger().info(f"Rotating Left @ {angle_rotated_z} degrees/s")
+                self.get_logger().info(f"Rotating Left @ {angle_velocity_z} degrees/s")
                 #self.get_logger().info(f"Rotating Left @ {abs(angular_z)} rad/s")
             elif angular_z < 0:
-                self.get_logger().info(f"Rotating Right @ {angle_rotated_z} degrees/s")
+                self.get_logger().info(f"Rotating Right @ {angle_velocity_z} degrees/s")
                 #self.get_logger().info(f"Rotating Right @ {abs(angular_z)} rad/s")
 
             for i in range(steps_angular_z):
