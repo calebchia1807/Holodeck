@@ -23,7 +23,7 @@ class UnityNav(Node):
         '''
         FOR TELEOP_TWIST KEYBOARD
         -------------------------
-        k/K: stop
+        k/K: NA
 
         i/I: move forward
         ,/<: move back
@@ -39,7 +39,7 @@ class UnityNav(Node):
         O: move forward & move right
 
         m: move back & rotate right
-        .: move back & rotate right
+        .: move back & rotate left
         M: move back & move left
         >: move back & move right
         '''
@@ -54,7 +54,7 @@ class UnityNav(Node):
 
         commands = []
         timestep = 0.02        
-    
+        
         # move forward & backward
         if linear_x != 0:
             velocity_x = abs(linear_x)
