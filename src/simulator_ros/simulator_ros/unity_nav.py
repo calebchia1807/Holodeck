@@ -145,11 +145,12 @@ class UnityNav(Node):
             self.get_logger().error("Failed to connect to Unity server!")
 
 def main(args=None):
+    rclpy.init(args=args)
+    node = UnityNav()
     try:
-        rclpy.init(args=args)
-        node = UnityNav()
         rclpy.spin(node)
-        node.destroy_node()
-        rclpy.shutdown()
     except KeyboardInterrupt:
         pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
