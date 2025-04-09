@@ -10,10 +10,8 @@ from ai2thor.controller import Controller
 from ai2thor.hooks.procedural_asset_hook import ProceduralAssetHookRunner
 from ai2holodeck.constants import HOLODECK_BASE_DATA_DIR, THOR_COMMIT_ID, OBJATHOR_ASSETS_DIR
 
-from PIL import Image
-
 SHARED_MEMORY_NAME = os.path.expanduser("~/unity_cam_shm")
-SHM_SIZE = 300 * 300 * 4 
+SHM_SIZE = 353 * 906 * 4 
 
 exponent_calculated = False
 exponent = 0
@@ -39,15 +37,12 @@ def get_frames(controller):
         exponent_calculated = True
     upped_depth_frame = (depth_frame * float(10**exponent))
 
-    img = Image.fromarray(upped_depth_frame)
-    img.show(title='Depth Image')
+    depth_bytes = upped_depth_frame.astype(np.float32).tobytes()
+    with open(SHARED_MEMORY_NAME, "r+b") as shm:
+        shm.write(depth_bytes)
 
-# def get_frames(controller):
-#     depth_frame = controller.last_event.depth_frame
-#     print(depth_frame)
-#     depth_bytes = depth_frame.astype(np.float32).tobytes()
-#     with open(SHARED_MEMORY_NAME, "r+b") as shm:
-#         shm.write(depth_bytes)
+    # img = Image.fromarray(upped_depth_frame)
+    # img.show(title='Depth Image')
 
 def main():
     parser = ArgumentParser()
