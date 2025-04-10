@@ -13,36 +13,11 @@ from ai2holodeck.constants import HOLODECK_BASE_DATA_DIR, THOR_COMMIT_ID, OBJATH
 SHARED_MEMORY_NAME = os.path.expanduser("~/unity_cam_shm")
 SHM_SIZE = 353 * 906 * 4 
 
-exponent_calculated = False
-exponent = 0
-
-def avg_exponent(arr):
-    non_zero_vals = arr[arr > 0]
-    if non_zero_vals.size == 0:
-        return None
-    
-    max_val = np.max(non_zero_vals)
-    max_exponent = int(np.floor(np.log10(max_val)))
-    min_val = np.min(non_zero_vals)
-    min_exponent = int(np.floor(np.log10(min_val)))
-    avg_exponent = abs(max_exponent + min_exponent) / 2
-    return avg_exponent
-
 def get_frames(controller):
-    global exponent_calculated, exponent
-
     depth_frame = controller.last_event.depth_frame
-    if exponent_calculated == False:
-        exponent = avg_exponent(depth_frame)
-        exponent_calculated = True
-    upped_depth_frame = (depth_frame * float(10**exponent))
-
-    depth_bytes = upped_depth_frame.astype(np.float32).tobytes()
+    depth_bytes = depth_frame.astype(np.float32).tobytes()
     with open(SHARED_MEMORY_NAME, "r+b") as shm:
         shm.write(depth_bytes)
-
-    # img = Image.fromarray(upped_depth_frame)
-    # img.show(title='Depth Image')
 
 def main():
     parser = ArgumentParser()
@@ -82,7 +57,6 @@ def main():
         ),
     )
 
-    # Create shared memory file
     with open(SHARED_MEMORY_NAME, "wb") as shm:
         shm.write(b"\x00" * SHM_SIZE)
 
