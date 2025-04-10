@@ -1,0 +1,45 @@
+import rclpy
+from rclpy.node import Node
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+import numpy as np
+import os
+import cv2
+
+SHARED_MEMORY_NAME_SEGMENTATION = os.path.expanduser("~/segmentation_cam_shm")
+SHM_SIZE_SEGMENTATION = 353 * 906 * 3 * 4
+
+def read_segmentation_frame():
+    with open(SHARED_MEMORY_NAME_SEGMENTATION, "rb") as shm:
+        data = shm.read(SHM_SIZE_SEGMENTATION)
+        return np.frombuffer(data, dtype=np.int32).reshape(353, 906, 3)
+    
+class SegmentationImagePublisher(Node):
+    def __init__(self):
+        super().__init__('unity_segmentation_image_publisher')
+        self.publisher = self.create_publisher(Image, 'segmentation_image', 10)
+        self.bridge = CvBridge()
+        self.timer = self.create_timer(0.1, self.publish_segmentation_image)
+
+    def publish_segmentation_image(self):
+        segmentation_frame = read_segmentation_frame().astype(np.uint8)
+        rgb_image = cv2.cvtColor(segmentation_frame, cv2.COLOR_BGR2RGB)
+
+        ros_image = self.bridge.cv2_to_imgmsg(rgb_image, encoding='rgb8')
+        ros_image.header.stamp = self.get_clock().now().to_msg()
+        ros_image.header.frame_id = "camera_link"
+
+        # Publish to ROS
+        self.publisher.publish(ros_image)
+        self.get_logger().info("Published segmentation image.")
+        
+def main(args=None):
+    rclpy.init(args=args)
+    node = SegmentationImagePublisher()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    cv2.destroyAllWindows()
+    node.destroy_node()
+    rclpy.shutdown()

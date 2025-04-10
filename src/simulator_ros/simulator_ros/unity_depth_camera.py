@@ -6,12 +6,12 @@ import numpy as np
 import os
 import cv2
 
-SHARED_MEMORY_NAME = os.path.expanduser("~/unity_cam_shm")
-SHM_SIZE = 353 * 906 * 4
+SHARED_MEMORY_NAME_DEPTH = os.path.expanduser("~/depth_cam_shm")
+SHM_SIZE_DEPTH = 353 * 906 * 4
 
 def read_depth_frame():
-    with open(SHARED_MEMORY_NAME, "rb") as shm:
-        data = shm.read(SHM_SIZE)
+    with open(SHARED_MEMORY_NAME_DEPTH, "rb") as shm:
+        data = shm.read(SHM_SIZE_DEPTH)
         return np.frombuffer(data, dtype=np.float32).reshape(353, 906)
 
 def normalize_depth(depth_frame):
@@ -30,7 +30,7 @@ def normalize_depth(depth_frame):
 class DepthImagePublisher(Node):
     def __init__(self):
         super().__init__('unity_depth_image_publisher')
-        self.publisher_ = self.create_publisher(Image, 'depth_image', 10)
+        self.publisher = self.create_publisher(Image, 'depth_image', 10)
         self.bridge = CvBridge()
         self.timer = self.create_timer(0.1, self.publish_depth_image)
 
@@ -41,10 +41,9 @@ class DepthImagePublisher(Node):
 
         ros_image = self.bridge.cv2_to_imgmsg(scaled_depth, encoding='32FC1')
         ros_image.header.stamp = self.get_clock().now().to_msg()
-        ros_image.header.frame_id = "camera_link"
 
-        self.publisher_.publish(ros_image)
-        self.get_logger().info("Published normalized depth image.")
+        self.publisher.publish(ros_image)
+        self.get_logger().info("Published depth image.")
 
 def main(args=None):
     rclpy.init(args=args)

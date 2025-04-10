@@ -23,9 +23,10 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'unity_nav           = simulator_ros.unity_nav:main',
-            'unity_stand_crouch  = simulator_ros.unity_stand_crouch:main',
-            'unity_depth_camera  = simulator_ros.unity_depth_camera:main'
+            'unity_nav                  = simulator_ros.unity_nav:main',
+            'unity_stand_crouch         = simulator_ros.unity_stand_crouch:main',
+            'unity_depth_camera         = simulator_ros.unity_depth_camera:main',
+            'unity_segmentation_camera  = simulator_ros.unity_segmentation_camera:main',
         ],
     },
 )

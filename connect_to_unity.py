@@ -10,14 +10,29 @@ from ai2thor.controller import Controller
 from ai2thor.hooks.procedural_asset_hook import ProceduralAssetHookRunner
 from ai2holodeck.constants import HOLODECK_BASE_DATA_DIR, THOR_COMMIT_ID, OBJATHOR_ASSETS_DIR
 
-SHARED_MEMORY_NAME = os.path.expanduser("~/unity_cam_shm")
-SHM_SIZE = 353 * 906 * 4 
+SHARED_MEMORY_NAME_DEPTH        = os.path.expanduser("~/depth_cam_shm")
+SHARED_MEMORY_NAME_SEGMENTATION = os.path.expanduser("~/segmentation_cam_shm")
+SHM_SIZE_DEPTH = 353 * 906 * 4
+SHM_SIZE_SEGMENTATION = 353 * 906 * 3 * 4
 
-def get_frames(controller):
+def get_depth_frames(controller):
     depth_frame = controller.last_event.depth_frame
     depth_bytes = depth_frame.astype(np.float32).tobytes()
-    with open(SHARED_MEMORY_NAME, "r+b") as shm:
+    with open(SHARED_MEMORY_NAME_DEPTH, "r+b") as shm:
         shm.write(depth_bytes)
+
+from PIL import Image
+def get_segmentation_frames(controller):
+    segmentation_frame = controller.last_event.instance_segmentation_frame
+    print(segmentation_frame.shape)
+    # testing
+    print(segmentation_frame)
+    img = Image.fromarray(segmentation_frame)
+    img.show(title='Depth Image')
+    
+    segmentation_bytes = segmentation_frame.astype(np.int32).tobytes()
+    with open(SHARED_MEMORY_NAME_SEGMENTATION, "r+b") as shm:
+        shm.write(segmentation_bytes)
 
 def main():
     parser = ArgumentParser()
@@ -57,11 +72,14 @@ def main():
         ),
     )
 
-    with open(SHARED_MEMORY_NAME, "wb") as shm:
-        shm.write(b"\x00" * SHM_SIZE)
+    with open(SHARED_MEMORY_NAME_DEPTH, "wb") as shm:
+        shm.write(b"\x00" * SHM_SIZE_DEPTH)
+    with open(SHARED_MEMORY_NAME_SEGMENTATION, "wb") as shm:
+        shm.write(b"\x00" * SHM_SIZE_SEGMENTATION)
 
     controller.step(action="CreateHouse", house=scene)
-    get_frames(controller)
+    get_depth_frames(controller)
+    get_segmentation_frames(controller)
     print("Scene initialized.")
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -75,10 +93,11 @@ def main():
                 command = client_socket.recv(1024).decode()
                 command_dict = json.loads(command)
                 controller.step(**command_dict)
-                get_frames(controller)
+                get_depth_frames(controller)
+                get_segmentation_frames(controller)
     except KeyboardInterrupt:
         server_socket.close()
-        os.remove(SHARED_MEMORY_NAME)
+        os.remove(SHARED_MEMORY_NAME_DEPTH)
         print("Shutting down...")
 
 if __name__ == "__main__":

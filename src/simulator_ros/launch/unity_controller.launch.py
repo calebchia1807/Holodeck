@@ -21,4 +21,10 @@ def generate_launch_description():
             output='screen',
             emulate_tty=True,
         ),
+        Node(
+            package='simulator_ros',
+            executable='unity_segmentation_camera',
+            output='screen',
+            emulate_tty=True,
+        ),
     ])
