@@ -24,12 +24,6 @@ def get_depth_frames(controller):
 from PIL import Image
 def get_segmentation_frames(controller):
     segmentation_frame = controller.last_event.instance_segmentation_frame
-    print(segmentation_frame.shape)
-    # testing
-    print(segmentation_frame)
-    img = Image.fromarray(segmentation_frame)
-    img.show(title='Depth Image')
-    
     segmentation_bytes = segmentation_frame.astype(np.int32).tobytes()
     with open(SHARED_MEMORY_NAME_SEGMENTATION, "r+b") as shm:
         shm.write(segmentation_bytes)
