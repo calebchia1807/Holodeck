@@ -29,7 +29,6 @@ class SegmentationImagePublisher(Node):
         ros_image.header.stamp = self.get_clock().now().to_msg()
         ros_image.header.frame_id = "camera_link"
 
-        # Publish to ROS
         self.publisher.publish(ros_image)
         self.get_logger().info("Published segmentation image.")
         
