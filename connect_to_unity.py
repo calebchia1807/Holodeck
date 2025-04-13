@@ -15,8 +15,8 @@ SHARED_MEMORY_NAME_RGB          = os.path.expanduser("~/rgb_cam_shm")
 SHARED_MEMORY_NAME_BGR          = os.path.expanduser("~/bgr_cam_shm")
 SHARED_MEMORY_NAME_DEPTH        = os.path.expanduser("~/depth_cam_shm")
 SHARED_MEMORY_NAME_SEGMENTATION = os.path.expanduser("~/segmentation_cam_shm")
-SHM_SIZE_FRAME = 353 * 906 * 3 * 4
-SHM_SIZE_DEPTH = 353 * 906 * 4
+SHM_SIZE_FRAME = 353 * 906 * 3 * 4  # for rgb, bgr & segmentation -> the array is 353x906 matrix where each are 1x3 matrix
+SHM_SIZE_DEPTH = 353 * 906 * 4      
 
 def get_rgb_frames(controller):
     rgb_frame = controller.last_event.frame
