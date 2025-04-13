@@ -10,6 +10,7 @@ from ai2thor.controller import Controller
 from ai2thor.hooks.procedural_asset_hook import ProceduralAssetHookRunner
 from ai2holodeck.constants import HOLODECK_BASE_DATA_DIR, THOR_COMMIT_ID, OBJATHOR_ASSETS_DIR
 
+# shared memory to send respective the frame data
 SHARED_MEMORY_NAME_RGB          = os.path.expanduser("~/rgb_cam_shm")
 SHARED_MEMORY_NAME_BGR          = os.path.expanduser("~/bgr_cam_shm")
 SHARED_MEMORY_NAME_DEPTH        = os.path.expanduser("~/depth_cam_shm")
@@ -41,6 +42,7 @@ def get_segmentation_frames(controller):
     with open(SHARED_MEMORY_NAME_SEGMENTATION, "r+b") as shm:
         shm.write(segmentation_bytes)
 
+# holodeck code
 def main():
     parser = ArgumentParser()
     parser.add_argument(
@@ -78,6 +80,8 @@ def main():
             verbose=True,
         ),
     )
+
+    # shared memory & control within unity
     with open(SHARED_MEMORY_NAME_RGB, "wb") as shm:
         shm.write(b"\x00" * SHM_SIZE_FRAME)
     with open(SHARED_MEMORY_NAME_BGR, "wb") as shm:
