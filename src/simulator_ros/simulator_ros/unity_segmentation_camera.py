@@ -23,9 +23,9 @@ class SegmentationImagePublisher(Node):
 
     def publish_segmentation_image(self):
         segmentation_frame = read_segmentation_frame().astype(np.uint8)
-        rgb_image = cv2.cvtColor(segmentation_frame, cv2.COLOR_BGR2RGB)
+        # rgb_image = cv2.cvtColor(segmentation_frame, cv2.COLOR_BGR2RGB)
 
-        ros_image = self.bridge.cv2_to_imgmsg(rgb_image, encoding='rgb8')
+        ros_image = self.bridge.cv2_to_imgmsg(segmentation_frame, encoding='rgb8')
         ros_image.header.stamp = self.get_clock().now().to_msg()
         ros_image.header.frame_id = "camera_link"
 

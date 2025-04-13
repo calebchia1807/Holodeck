@@ -17,7 +17,13 @@ def generate_launch_description():
         ),
         Node(
             package='simulator_ros',
-            executable='unity_frame_camera',
+            executable='unity_rgb_camera',
+            output='screen',
+            emulate_tty=True,
+        ),
+        Node(
+            package='simulator_ros',
+            executable='unity_bgr_camera',
             output='screen',
             emulate_tty=True,
         ),

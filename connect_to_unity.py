@@ -10,17 +10,24 @@ from ai2thor.controller import Controller
 from ai2thor.hooks.procedural_asset_hook import ProceduralAssetHookRunner
 from ai2holodeck.constants import HOLODECK_BASE_DATA_DIR, THOR_COMMIT_ID, OBJATHOR_ASSETS_DIR
 
-SHARED_MEMORY_NAME_FRAME        = os.path.expanduser("~/frame_cam_shm")
+SHARED_MEMORY_NAME_RGB          = os.path.expanduser("~/rgb_cam_shm")
+SHARED_MEMORY_NAME_BGR          = os.path.expanduser("~/bgr_cam_shm")
 SHARED_MEMORY_NAME_DEPTH        = os.path.expanduser("~/depth_cam_shm")
 SHARED_MEMORY_NAME_SEGMENTATION = os.path.expanduser("~/segmentation_cam_shm")
 SHM_SIZE_FRAME = 353 * 906 * 3 * 4
 SHM_SIZE_DEPTH = 353 * 906 * 4
 
-def get_frames(controller):
-    frame = controller.last_event.frame
-    frame_bytes = frame.astype(np.int32).tobytes()
-    with open(SHARED_MEMORY_NAME_FRAME, "r+b") as shm:
-        shm.write(frame_bytes)
+def get_rgb_frames(controller):
+    rgb_frame = controller.last_event.frame
+    rgb_bytes = rgb_frame.astype(np.int32).tobytes()
+    with open(SHARED_MEMORY_NAME_RGB, "r+b") as shm:
+        shm.write(rgb_bytes)
+
+def get_bgr_frames(controller):
+    bgr_frame = controller.last_event.cv2img
+    bgr_bytes = bgr_frame.astype(np.int32).tobytes()
+    with open(SHARED_MEMORY_NAME_BGR, "r+b") as shm:
+        shm.write(bgr_bytes)
 
 def get_depth_frames(controller):
     depth_frame = controller.last_event.depth_frame
@@ -71,7 +78,9 @@ def main():
             verbose=True,
         ),
     )
-    with open(SHARED_MEMORY_NAME_FRAME, "wb") as shm:
+    with open(SHARED_MEMORY_NAME_RGB, "wb") as shm:
+        shm.write(b"\x00" * SHM_SIZE_FRAME)
+    with open(SHARED_MEMORY_NAME_BGR, "wb") as shm:
         shm.write(b"\x00" * SHM_SIZE_FRAME)
     with open(SHARED_MEMORY_NAME_DEPTH, "wb") as shm:
         shm.write(b"\x00" * SHM_SIZE_DEPTH)
@@ -79,7 +88,8 @@ def main():
         shm.write(b"\x00" * SHM_SIZE_FRAME)
 
     controller.step(action="CreateHouse", house=scene)
-    get_frames(controller)
+    get_rgb_frames(controller)
+    get_bgr_frames(controller)
     get_depth_frames(controller)
     get_segmentation_frames(controller)
     print("Scene initialized.")
@@ -95,7 +105,8 @@ def main():
                 command = client_socket.recv(1024).decode()
                 command_dict = json.loads(command)
                 controller.step(**command_dict)
-                get_frames(controller)
+                get_rgb_frames(controller)
+                get_bgr_frames(controller)
                 get_depth_frames(controller)
                 get_segmentation_frames(controller)
     except KeyboardInterrupt:
