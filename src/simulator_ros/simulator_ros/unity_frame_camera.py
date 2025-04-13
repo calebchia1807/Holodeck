@@ -23,9 +23,8 @@ class FrameImagePublisher(Node):
 
     def publish_frame_image(self):
         frame = read_frame().astype(np.uint8)
-        rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        ros_image = self.bridge.cv2_to_imgmsg(rgb_image, encoding='rgb8')
+        ros_image = self.bridge.cv2_to_imgmsg(frame, encoding='rgb8')
         ros_image.header.stamp = self.get_clock().now().to_msg()
         ros_image.header.frame_id = "camera_link"
 

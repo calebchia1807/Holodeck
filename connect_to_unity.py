@@ -15,7 +15,6 @@ SHARED_MEMORY_NAME_DEPTH        = os.path.expanduser("~/depth_cam_shm")
 SHARED_MEMORY_NAME_SEGMENTATION = os.path.expanduser("~/segmentation_cam_shm")
 SHM_SIZE_FRAME = 353 * 906 * 3 * 4
 SHM_SIZE_DEPTH = 353 * 906 * 4
-SHM_SIZE_SEGMENTATION = 353 * 906 * 3 * 4
 
 def get_frames(controller):
     frame = controller.last_event.frame
@@ -77,7 +76,7 @@ def main():
     with open(SHARED_MEMORY_NAME_DEPTH, "wb") as shm:
         shm.write(b"\x00" * SHM_SIZE_DEPTH)
     with open(SHARED_MEMORY_NAME_SEGMENTATION, "wb") as shm:
-        shm.write(b"\x00" * SHM_SIZE_SEGMENTATION)
+        shm.write(b"\x00" * SHM_SIZE_FRAME)
 
     controller.step(action="CreateHouse", house=scene)
     get_frames(controller)
