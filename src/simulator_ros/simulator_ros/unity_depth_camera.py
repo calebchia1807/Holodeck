@@ -12,7 +12,7 @@ SHM_SIZE_FRAME = 353 * 906 * 4
 def read_depth_frame():
     with open(SHARED_MEMORY_DEPTH, "rb") as shm:
         data = shm.read(SHM_SIZE_FRAME)
-        return np.frombuffer(data, dtype=np.float32).remreshape(353, 906)
+        return np.frombuffer(data, dtype=np.float32).reshape(353, 906)
 
 def normalize_depth(depth_frame):
     if np.isnan(depth_frame).any():
