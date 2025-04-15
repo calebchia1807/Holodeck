@@ -42,6 +42,9 @@ class UnityNav(Node):
         .: move back & rotate left
         M: move back & move left
         >: move back & move right
+
+        t: stand
+        b: crouch
         '''
 
     def cmd_vel_callback(self, msg):
@@ -88,6 +91,17 @@ class UnityNav(Node):
                     commands.append({"action": "MoveLeft", "moveMagnitude": move_magnitude_y})
                 elif linear_y < 0:
                     commands.append({"action": "MoveRight", "moveMagnitude": move_magnitude_y})
+
+        # stand & crouch
+        if linear_z != 0:
+            velocity_z = abs(linear_z)
+            
+            if linear_z > 0:
+                self.get_logger().info(f"Standing")
+                commands.append({"action": "Stand"})
+            elif linear_z < 0:
+                self.get_logger().info(f"Crouching")
+                commands.append({"action": "Crouch"})
 
         # look up & down
         if angular_y != 0:
