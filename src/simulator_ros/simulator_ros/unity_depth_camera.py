@@ -48,10 +48,13 @@ class DepthImagePublisher(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = DepthImagePublisher()
-    rclpy.spin(node)
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    cv2.destroyAllWindows()
     node.destroy_node()
     rclpy.shutdown()
-    cv2.destroyAllWindows()
 
 
 '''
