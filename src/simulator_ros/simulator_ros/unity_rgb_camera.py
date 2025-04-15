@@ -6,7 +6,7 @@ import numpy as np
 import os
 import cv2
 
-SHARED_MEMORY_RGB = os.path.expanduser("~/rgb_cam_shm")
+SHARED_MEMORY_RGB = os.path.expanduser("~/rgb_shm")
 SHM_SIZE_FRAME = 353 * 906 * 3 * 4
 
 def read_rgb_frame():
