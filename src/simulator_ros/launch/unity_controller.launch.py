@@ -39,4 +39,10 @@ def generate_launch_description():
             output='screen',
             emulate_tty=True,
         ),
+        Node(
+            package='simulator_ros',
+            executable='unity_bounding_box',
+            output='screen',
+            emulate_tty=True,
+        ),
     ])

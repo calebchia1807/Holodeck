@@ -31,6 +31,7 @@ setup(
             'unity_bgr_camera           = simulator_ros.unity_bgr_camera:main',
             'unity_depth_camera         = simulator_ros.unity_depth_camera:main',
             'unity_segmentation_camera  = simulator_ros.unity_segmentation_camera:main',
+            'unity_bounding_box         = simulator_ros.unity_bounding_box:main',
         ],
     },
 )
