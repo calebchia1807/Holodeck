@@ -6,11 +6,11 @@ import numpy as np
 import os
 import cv2
 
-SHARED_MEMORY_NAME_BGR = os.path.expanduser("~/bgr_cam_shm")
+SHARED_MEMORY_BGR = os.path.expanduser("~/bgr_cam_shm")
 SHM_SIZE_FRAME = 353 * 906 * 3 * 4
 
 def read_bgr_frame():
-    with open(SHARED_MEMORY_NAME_BGR, "rb") as shm:
+    with open(SHARED_MEMORY_BGR, "rb") as shm:
         data = shm.read(SHM_SIZE_FRAME)
         return np.frombuffer(data, dtype=np.int32).reshape(353, 906, 3)
     

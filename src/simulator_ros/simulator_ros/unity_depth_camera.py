@@ -6,11 +6,11 @@ import numpy as np
 import os
 import cv2
 
-SHARED_MEMORY_NAME_DEPTH = os.path.expanduser("~/depth_cam_shm")
+SHARED_MEMORY_DEPTH = os.path.expanduser("~/depth_cam_shm")
 SHM_SIZE_DEPTH = 353 * 906 * 4
 
 def read_depth_frame():
-    with open(SHARED_MEMORY_NAME_DEPTH, "rb") as shm:
+    with open(SHARED_MEMORY_DEPTH, "rb") as shm:
         data = shm.read(SHM_SIZE_DEPTH)
         return np.frombuffer(data, dtype=np.float32).reshape(353, 906)
 

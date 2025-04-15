@@ -6,11 +6,11 @@ import numpy as np
 import os
 import cv2
 
-SHARED_MEMORY_NAME_SEGMENTATION = os.path.expanduser("~/segmentation_cam_shm")
+SHARED_MEMORY_SEGMENTATION = os.path.expanduser("~/segmentation_cam_shm")
 SHM_SIZE_FRAME = 353 * 906 * 3 * 4
 
 def read_segmentation_frame():
-    with open(SHARED_MEMORY_NAME_SEGMENTATION, "rb") as shm:
+    with open(SHARED_MEMORY_SEGMENTATION, "rb") as shm:
         data = shm.read(SHM_SIZE_FRAME)
         return np.frombuffer(data, dtype=np.int32).reshape(353, 906, 3)
     
