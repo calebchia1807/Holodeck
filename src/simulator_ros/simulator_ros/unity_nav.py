@@ -61,7 +61,6 @@ class UnityNav(Node):
         if linear_x == 0 and linear_y == 0 and linear_z == 0 and angular_x == 0 and angular_y == 0 and angular_z == 0:
             self.send_command_to_unity(json.dumps({"action": "MoveAhead", "moveMagnitude": 0}))
             self.send_command_to_unity(json.dumps({"action": "MoveLeft", "moveMagnitude": 0}))
-            self.send_command_to_unity(json.dumps({"action": "LookUp", "degrees": 0}))
             self.send_command_to_unity(json.dumps({"action": "RotateLeft", "degrees": 0}))
 
         # move forward & backward
