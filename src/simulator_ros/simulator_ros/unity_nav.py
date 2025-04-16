@@ -50,8 +50,8 @@ class UnityNav(Node):
     def cmd_vel_callback(self, msg):
         linear_x = msg.linear.x     # front / back
         linear_y = msg.linear.y     # left / right
-        linear_z = msg.linear.z     # NA
-        angular_x = msg.angular.x   # stand / crouch
+        linear_z = msg.linear.z     # stand / crouch
+        angular_x = msg.angular.x   # stand / crouch - row
         angular_y = msg.angular.y   # look up / down - pitch
         angular_z = msg.angular.z   # rotate left / right - yaw
         
