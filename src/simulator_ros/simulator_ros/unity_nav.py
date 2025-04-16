@@ -56,7 +56,7 @@ class UnityNav(Node):
         angular_z = msg.angular.z   # rotate left / right - yaw
         
         commands = []
-        timestep = 0.02        
+        timestep = 0.02
         
         # move forward & backward
         if linear_x != 0:
