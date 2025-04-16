@@ -51,7 +51,7 @@ class UnityNav(Node):
         linear_x = msg.linear.x     # front / back
         linear_y = msg.linear.y     # left / right
         linear_z = msg.linear.z     # stand / crouch
-        angular_x = msg.angular.x   # stand / crouch - row
+        angular_x = msg.angular.x   # NA - row
         angular_y = msg.angular.y   # look up / down - pitch
         angular_z = msg.angular.z   # rotate left / right - yaw
         
