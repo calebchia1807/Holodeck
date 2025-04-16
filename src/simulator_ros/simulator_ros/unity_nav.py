@@ -23,7 +23,7 @@ class UnityNav(Node):
         '''
         FOR TELEOP_TWIST KEYBOARD
         -------------------------
-        k/K: NA
+        k/K: stop
 
         i/I: move forward
         ,/<: move back
@@ -45,6 +45,13 @@ class UnityNav(Node):
 
         t: stand
         b: crouch
+
+        
+        FOR /cmd_vel PUBLICATION
+        ------------------------
+        ros2 topic pub -r 50 cmd_vel geometry_msgs/msg/Twist '{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}'
+        ** -r 50    >>> 50hz as timestep in unity is 0.02
+        ** input values for linear xyz & angular xyz
         '''
 
     def cmd_vel_callback(self, msg):
