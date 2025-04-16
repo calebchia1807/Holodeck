@@ -55,9 +55,15 @@ class UnityNav(Node):
         angular_y = msg.angular.y   # look up / down - pitch
         angular_z = msg.angular.z   # rotate left / right - yaw
         
-        commands = []
         timestep = 0.02
         
+        # no motion
+        if linear_x == 0 and linear_y == 0 and linear_z == 0 and angular_x == 0 and angular_y == 0 and angular_z == 0:
+            self.send_command_to_unity(json.dumps({"action": "MoveAhead", "moveMagnitude": 0}))
+            self.send_command_to_unity(json.dumps({"action": "MoveLeft", "moveMagnitude": 0}))
+            self.send_command_to_unity(json.dumps({"action": "LookUp", "degrees": 0}))
+            self.send_command_to_unity(json.dumps({"action": "RotateLeft", "degrees": 0}))
+
         # move forward & backward
         if linear_x != 0:
             velocity_x = abs(linear_x)
@@ -88,10 +94,10 @@ class UnityNav(Node):
             
             if linear_z > 0:
                 self.get_logger().info(f"Standing")
-                commands.append({"action": "Stand"})
+                self.send_command_to_unity(json.dumps({"action": "Stand"}))
             elif linear_z < 0:
                 self.get_logger().info(f"Crouching")
-                commands.append({"action": "Crouch"})
+                self.send_command_to_unity(json.dumps({"action": "Crouch"}))
 
         # look up & down
         if angular_y != 0:
