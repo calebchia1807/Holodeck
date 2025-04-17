@@ -101,7 +101,7 @@ def main():
     with open(SHARED_MEMORY_SEGMENTATION, "wb") as shm:
         shm.write(b"\x00" * SHM_SIZE_FRAME)
     with open(SHARED_MEMORY_BOUNDING_BOX, "wb") as shm:
-        shm.write(b"\x00" * SHM_SIZE_FRAME)     ##TBC
+        shm.write(b"\x00" * SHM_SIZE_FRAME)
 
     controller.step(action="CreateHouse", house=scene)
     get_rgb_frames(controller)
