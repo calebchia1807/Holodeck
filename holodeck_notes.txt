@@ -55,8 +55,14 @@ python holodeck/main.py --query "a living room" --openai_api_key <OPENAI_API_KEY
 
 
 ----------------------------------------------------------------------------------------------
-Unity
-- unable to use unity's ros tcp
+TO IMPORT OWN ASSETS INTO OBJATHOR
+1. Create a conda env with python==3.10 minimum
+2. Install the following
+	pip install objathor[annotation]
+	pip install git+https://github.com/nltk/nltk@582e6e35f0e6c984b44ec49dcb8846d9c011d0a8
+	python -c "import nltk; nltk.download('punkt'); nltk.download('wordnet2022'); nltk.download('brown'); nltk.download('averaged_perceptron_tagger')"
+	pip install -e ".[annotation]"
+	pip install bpy
 
 
 ----------------------------------------------------------------------------------------------
