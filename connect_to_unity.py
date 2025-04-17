@@ -18,7 +18,7 @@ SHARED_MEMORY_DEPTH         = os.path.expanduser("~/depth_shm")
 SHARED_MEMORY_SEGMENTATION  = os.path.expanduser("~/segmentation_shm")
 SHARED_MEMORY_BOUNDING_BOX  = os.path.expanduser("~/bounding_box_shm")
 SHM_SIZE_FRAME = 353 * 906 * 3 * 4  # for rgb, bgr & segmentation -> the array is 353x906 matrix where each are 1x3 matrix
-SHM_SIZE_DEPTH = 353 * 906 * 4      
+SHM_SIZE_DEPTH = 353 * 906 * 4
 
 def get_rgb_frames(controller):
     rgb_frame = controller.last_event.frame
