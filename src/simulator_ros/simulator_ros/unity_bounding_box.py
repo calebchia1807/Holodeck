@@ -9,7 +9,7 @@ import pickle
 
 SHARED_MEMORY_BOUNDING_BOX = os.path.expanduser("~/bounding_box_shm")
 SHARED_MEMORY_RGB = os.path.expanduser("~/rgb_shm")
-SHM_SIZE_FRAME = 353 * 906 * 3 * 4
+SHM_SIZE_FRAME = 276 * 803 * 3 * 4
 
 def read_bounding_box_dict():
     with open(SHARED_MEMORY_BOUNDING_BOX, "rb") as shm:
@@ -19,7 +19,7 @@ def read_bounding_box_dict():
 def read_rgb_frame():
     with open(SHARED_MEMORY_RGB, "rb") as shm:
         data = shm.read(SHM_SIZE_FRAME)
-        return np.frombuffer(data, dtype=np.int32).reshape(353, 906, 3)
+        return np.frombuffer(data, dtype=np.int32).reshape(276, 803, 3)
 
 class BoundingBoxPublisher(Node):
     def __init__(self):
