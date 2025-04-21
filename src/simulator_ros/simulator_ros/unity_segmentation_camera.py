@@ -7,12 +7,12 @@ import os
 import cv2
 
 SHARED_MEMORY_SEGMENTATION = os.path.expanduser("~/segmentation_shm")
-SHM_SIZE_FRAME = 276 * 803 * 3 * 4
+SHM_SIZE_FRAME = 264 * 802  * 3 * 4
 
 def read_segmentation_frame():
     with open(SHARED_MEMORY_SEGMENTATION, "rb") as shm:
         data = shm.read(SHM_SIZE_FRAME)
-        return np.frombuffer(data, dtype=np.int32).reshape(276, 803, 3)
+        return np.frombuffer(data, dtype=np.int32).reshape(264, 802 , 3)
     
 class SegmentationImagePublisher(Node):
     def __init__(self):

@@ -7,12 +7,12 @@ import os
 import cv2
 
 SHARED_MEMORY_DEPTH = os.path.expanduser("~/depth_shm")
-SHM_SIZE_FRAME = 276 * 803 * 4
+SHM_SIZE_FRAME = 264 * 802  * 4
 
 def read_depth_frame():
     with open(SHARED_MEMORY_DEPTH, "rb") as shm:
         data = shm.read(SHM_SIZE_FRAME)
-        return np.frombuffer(data, dtype=np.float32).reshape(276, 803)
+        return np.frombuffer(data, dtype=np.float32).reshape(264, 802 )
 
 def normalize_depth(depth_frame):
     if np.isnan(depth_frame).any():
