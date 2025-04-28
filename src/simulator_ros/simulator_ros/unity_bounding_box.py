@@ -7,19 +7,27 @@ import os
 import cv2
 import pickle
 
+SHARED_MEMORY_FRAME_DIMENSIONS = os.path.expanduser("~/frame_dimensions_shm")
 SHARED_MEMORY_BOUNDING_BOX = os.path.expanduser("~/bounding_box_shm")
 SHARED_MEMORY_RGB = os.path.expanduser("~/rgb_shm")
-SHM_SIZE_FRAME = 549 * 1158  * 3 * 4
 
+def read_frame_dimensions():
+    with open(SHARED_MEMORY_FRAME_DIMENSIONS, "rb") as shm:
+        data = shm.read(3 * 4)
+        frame_dimensions = np.frombuffer(data, dtype=np.int32)
+        return frame_dimensions[0], frame_dimensions[1], frame_dimensions[2]
+    
 def read_bounding_box_dict():
     with open(SHARED_MEMORY_BOUNDING_BOX, "rb") as shm:
         data = shm.read()
         return pickle.loads(data)
 
 def read_rgb_frame():
+    height, width, channel = read_frame_dimensions()
+    shm_size_frame = height * width* channel * 4
     with open(SHARED_MEMORY_RGB, "rb") as shm:
-        data = shm.read(SHM_SIZE_FRAME)
-        return np.frombuffer(data, dtype=np.int32).reshape(549, 1158 , 3)
+        data = shm.read(shm_size_frame)
+        return np.frombuffer(data, dtype=np.int32).reshape(height, width, 3)
 
 class BoundingBoxPublisher(Node):
     def __init__(self):

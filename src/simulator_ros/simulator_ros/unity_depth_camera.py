@@ -6,13 +6,21 @@ import numpy as np
 import os
 import cv2
 
+SHARED_MEMORY_FRAME_DIMENSIONS = os.path.expanduser("~/frame_dimensions_shm")
 SHARED_MEMORY_DEPTH = os.path.expanduser("~/depth_shm")
-SHM_SIZE_FRAME = 549 * 1158  * 4
 
+def read_frame_dimensions():
+    with open(SHARED_MEMORY_FRAME_DIMENSIONS, "rb") as shm:
+        data = shm.read(3 * 4)
+        frame_dimensions = np.frombuffer(data, dtype=np.int32)
+        return frame_dimensions[0], frame_dimensions[1]
+    
 def read_depth_frame():
+    height, width = read_frame_dimensions()
+    shm_size_frame = height * width * 4
     with open(SHARED_MEMORY_DEPTH, "rb") as shm:
-        data = shm.read(SHM_SIZE_FRAME)
-        return np.frombuffer(data, dtype=np.float32).reshape(549, 1158)
+        data = shm.read(shm_size_frame)
+        return np.frombuffer(data, dtype=np.float32).reshape(height, width)
 
 def normalize_depth(depth_frame):
     if np.isnan(depth_frame).any():

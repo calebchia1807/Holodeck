@@ -12,40 +12,33 @@ from ai2thor.hooks.procedural_asset_hook import ProceduralAssetHookRunner
 from ai2holodeck.constants import HOLODECK_BASE_DATA_DIR, THOR_COMMIT_ID, OBJATHOR_ASSETS_DIR
 
 # shared memory to send respective the frame data
-SHARED_MEMORY_RGB           = os.path.expanduser("~/rgb_shm")
-SHARED_MEMORY_BGR           = os.path.expanduser("~/bgr_shm")
-SHARED_MEMORY_DEPTH         = os.path.expanduser("~/depth_shm")
-SHARED_MEMORY_SEGMENTATION  = os.path.expanduser("~/segmentation_shm")
-SHARED_MEMORY_BOUNDING_BOX  = os.path.expanduser("~/bounding_box_shm")
-
-# check this array size everytime, it changes!!!
-SHM_SIZE_FRAME = 549 * 1158 * 3 * 4  # for rgb, bgr & segmentation
-SHM_SIZE_DEPTH = 549 * 1158 * 4
+SHARED_MEMORY_FRAME_DIMENSIONS = os.path.expanduser("~/frame_dimensions_shm")
+SHARED_MEMORY_RGB              = os.path.expanduser("~/rgb_shm")
+SHARED_MEMORY_BGR              = os.path.expanduser("~/bgr_shm")
+SHARED_MEMORY_DEPTH            = os.path.expanduser("~/depth_shm")
+SHARED_MEMORY_SEGMENTATION     = os.path.expanduser("~/segmentation_shm")
+SHARED_MEMORY_BOUNDING_BOX     = os.path.expanduser("~/bounding_box_shm")
 
 def get_rgb_frames(controller):
     rgb_frame = controller.last_event.frame
-    # print(rgb_frame.shape)
     rgb_bytes = rgb_frame.astype(np.int32).tobytes()
     with open(SHARED_MEMORY_RGB, "r+b") as shm:
         shm.write(rgb_bytes)
 
 def get_bgr_frames(controller):
     bgr_frame = controller.last_event.cv2img
-    # print(bgr_frame.shape)
     bgr_bytes = bgr_frame.astype(np.int32).tobytes()
     with open(SHARED_MEMORY_BGR, "r+b") as shm:
         shm.write(bgr_bytes)
 
 def get_depth_frames(controller):
     depth_frame = controller.last_event.depth_frame
-    # print(depth_frame.shape)
     depth_bytes = depth_frame.astype(np.float32).tobytes()
     with open(SHARED_MEMORY_DEPTH, "r+b") as shm:
         shm.write(depth_bytes)
 
 def get_segmentation_frames(controller):
     segmentation_frame = controller.last_event.instance_segmentation_frame
-    # print(segmentation_frame.shape)
     segmentation_bytes = segmentation_frame.astype(np.int32).tobytes()
     with open(SHARED_MEMORY_SEGMENTATION, "r+b") as shm:
         shm.write(segmentation_bytes)
@@ -97,6 +90,17 @@ def main():
         ),
     )
 
+    # the frame size always changes, this dynamically updates the frame
+    height, width, channel = controller.last_event.frame.shape
+    SHM_SIZE_FRAME = height * width * channel* 4  # for rgb, bgr & segmentation
+    SHM_SIZE_DEPTH = height * width * 4
+    SHM_SIZE_FRAME_DIMENSIONS = 3 * 4
+    with open(SHARED_MEMORY_FRAME_DIMENSIONS, "wb") as shm:
+        shm.write(b"\x00" * SHM_SIZE_FRAME_DIMENSIONS)
+    frame_dimensions_array = np.array([height, width, channel], dtype=np.int32)
+    with open(SHARED_MEMORY_FRAME_DIMENSIONS, "r+b") as shm:
+        shm.write(frame_dimensions_array.tobytes())
+    
     # shared memory & control within unity
     with open(SHARED_MEMORY_RGB, "wb") as shm:
         shm.write(b"\x00" * SHM_SIZE_FRAME)
