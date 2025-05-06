@@ -7,7 +7,7 @@ TO GENERATE RUN HOLODECK
 
 
 2. Clone the Holodeck repo
-git clone https://github.com/allenai/Holodeck.git
+git clone https://github.com/calebchia1807/Holodeck.git
 
 
 3. Install dependencies
@@ -25,7 +25,7 @@ python -m objathor.dataset.download_features --version 2023_09_23
 
 
 5. Resolve dependencies error (not on holodeck git repo site)
-(1) copy and paste main.py to /Home/Desktop/Holodeck from /Home/Desktop/Holodeck/ai2holodeck
+(1) copy and paste main.py to /Home/Desktop/Holodeck from /Home/Desktop/Holodeck/ai2holodeck	-> can ignore if cloned from caleb's repo
 (2) Run:
 	pip3 install --upgrade torch
 	pip3 install moviepy==1.0.3
