@@ -89,23 +89,24 @@ ros2 launch simulator_ros unity_controller.launch.py
 ```
 
 There are the following functions in this package:
-1. Publish ```/cmd_vel``` to control the motion in Unity.
+1. Publish ```/cmd_vel``` to control the motion. Run:
    ```bash
    ros2 topic pub -r 50 cmd_vel geometry_msgs/msg/Twist '{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}'
    ```
-    | Parameter | Negative /cmd_vel | Positive /cmd_vel |
-    | :----: | :----: | :----: |
-    | linear x | move front | move back |
-    | linear y | move left | move right |
-    | linear z | stand | crouch |
-    | angular x | NA | NA |
-    | angular y | look up | look down |
-    | angular z | rotate left | rotate right |
-   
-   #### linear  : m/s
-   #### angular: degrees/s (can be changed to radian/s)
-   
-   #### CAN USE TELEOP_TWIST_KEYBOARD TO CONTROL AS WELL
+   #### linear is in m/s; randian is in degrees/s (can be changed to randian/s, refer to [this ros node](src/simulator_ros/simulator_ros/unity_nav.py).
+   | Parameter | Negative /cmd_vel | Positive /cmd_vel |
+   | :----: | :----: | :----: |
+   | linear x | move front | move back |
+   | linear y | move left | move right |
+   | linear z | stand | crouch |
+   | angular x | NA | NA |
+   | angular y | look up | look down |
+   | angular z | rotate left | rotate right |
+
+2. Control motion via ```teleop_twist_keyboard```. Run:
+   ``` bash
+   ros2 run teleop_twist_keyboard teleop_twist_keyboard
+   ```
    | Key | Movement | Key | Movement |
    | :----: | :----: | :----: | :----: |
    | k / K | stop | u | move forward & rotate left |
@@ -117,6 +118,23 @@ There are the following functions in this package:
    | l | rotate right |  M | move back & move left |
    | t | stand | > | move back & move right |
    | b | crouch |
+
+3. ROS2 Service for Stand & Crouch. Run:
+   ``` bash
+   ros2 service call /unity_stand_crouch/<service> std_srvs/srv/Trigger
+   ```
+   ```<services>``` available: ```stand``` or ```crouch```
+
+4. Live Feed in ```rviz2```.
+  
+   Under image in ```rviz2```, there are 5 feeds available. The ```topic``` available are as follows:
+   ```bash
+   unity_rgb_camera
+   unity_bgr_camera
+   unity_depth_camera
+   unity_segmentation_camera
+   unity_bounding_box
+   ```
         
 ## Adding new assets
 Please refer to this repo [ObjaTHOR](https://github.com/calebchia1807/objathor)
