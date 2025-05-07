@@ -138,5 +138,11 @@ There are the following functions in this package:
    unity_bounding_box
    ```
         
-## Adding new assets
-Please refer to this repo [ObjaTHOR](https://github.com/calebchia1807/objathor)
+## Adding new THOR assets
+Please refer to this repo [ObjaTHOR](https://github.com/calebchia1807/objathor) on how to run.
+
+After converting .glb assets into THOR assets, you need to manually add the asset into the .json generated earlier.
+
+Refer to lines 155 to 266 of this [.json file](/living_room.json) for examples for how to add.
+
+** Future work to automate this process!
