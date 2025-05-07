@@ -18,11 +18,12 @@
 ## Requirements
 - Ubuntu 20.04 (Unity 2020.3.25f1 only runs on this Ubuntu version)
 - Conda Environment
+- ROS2 Foxy
 - Holodeck is based on [AI2-THOR](https://ai2thor.allenai.org/ithor/documentation/#requirements).
 
 ## Installation
 After cloning the repo, run the following commands:
-```
+```bash
 conda create --name holodeck python=3.10.12
 conda activate holodeck
 pip3 install -r requirements.txt
@@ -45,7 +46,7 @@ by default these will save to `~/.objathor-assets/...`, you can change this dire
 
 ## Usage
 Run the following command to generate a new environment:
-```
+```bash
 python holodeck/main.py --query "<ROOM DESIRED>" --openai_api_key <OPENAI_API_KEY>
 ```
 - ```<ROOM DESIRED>```: Change to a query statement of room type you desire (example: "an apartment with 2 rooms")
@@ -54,12 +55,12 @@ python holodeck/main.py --query "<ROOM DESIRED>" --openai_api_key <OPENAI_API_KE
 ## Load the scene in Unity
 1. Install [Unity](https://unity.com/download) and select the editor version `2020.3.25f1`.
 2. Clone [AI2-THOR repository](https://github.com/allenai/ai2thor) and switch to the appropriate AI2-THOR commit.
-```
+```bash
 git clone https://github.com/allenai/ai2thor.git
 git checkout 07445be8e91ddeb5de2915c90935c4aef27a241d
 ```
 3. Reinstall some packages:
-```
+```bash
 pip uninstall Werkzeug
 pip uninstall Flask
 pip install Werkzeug==2.0.1
@@ -67,10 +68,66 @@ pip install Flask==2.0.1
 ```
 4. Load `ai2thor/unity` as project in Unity and open `ai2thor/unity/Assets/Scenes/Procedural/Procedural.unity`.
 5. In the terminal, run [this python script](connect_to_unity.py):
-```
+```bash
 python connect_to_unity --scene <SCENE_JSON_FILE_PATH>
 ```
-6. Press the play button (the triangle) in Unity to view the scene.
+6. Press the play button (the triangle) in Unity to load the scene. No actions can be made as it is waiting for ROS2 commands, see below.
 
+## ROS2 Integration
+**Ensure that ROS2 Foxy is installed for this to run.**
+Run the following to build the package:
+```bash
+cd ~/Holodeck
+source /opt/ros/foxy/setup.bash
+colcon build
+source install/setup.bash
+```
+
+Once the package is built, run the following to launch the package:
+```bash
+ros2 launch simulator_ros unity_controller.launch.py
+```
+
+There are the following functions in this package:
+1. Publish ```/cmd_vel``` to control the motion in Unity.
+   ```bash
+   ros2 topic pub -r 50 cmd_vel geometry_msgs/msg/Twist '{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}'
+   ```
+    | Parameter | Negative /cmd_vel | Positive /cmd_vel |
+    | :----: | :----: | :----: |
+    | linear x | move front | move back |
+    | linear y | move left | move right |
+    | linear z | stand | crouch |
+    | angular x | NA | NA |
+    | angular y | look up | look down |
+    | angular z | rotate left | rotate right |
+   
+   #### linear  : m/s
+   #### angular: degrees/s (can be changed to radian/s)
+   
+   #### CAN USE TELEOP_TWIST_KEYBOARD TO CONTROL AS WELL
+   | Key | Movement |
+   | :----: | :----: |
+   | k/K | stop |
+   | i/I | move forward |
+   | ,/< | move back |
+   | J | move left |
+    L: move right
+    j: rotate left
+    l: rotate right
+    
+    u: move forward & rotate left
+    o: move forward & rotate right
+    U: move forward & move left
+    O: move forward & move right
+    
+    m: move back & rotate right
+    .: move back & rotate left
+    M: move back & move left
+    >: move back & move right
+    
+    t: stand
+    b: crouch
+        
 ## Adding new assets
 Please refer to this repo [ObjaTHOR](https://github.com/calebchia1807/objathor)
