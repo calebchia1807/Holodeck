@@ -106,24 +106,16 @@ There are the following functions in this package:
    #### angular: degrees/s (can be changed to radian/s)
    
    #### CAN USE TELEOP_TWIST_KEYBOARD TO CONTROL AS WELL
-   | Key | Movement |
-   | :----: | :----: |
-   | k / K | stop |
-   | i / I | move forward |
-   | , / < | move back |
-   | J | move left |
-   | L | move right |
-   | j | rotate left |
-   | l | rotate right |
-   | u | move forward & rotate left |
-   | o | move forward & rotate right |
-   | U | move forward & move left |
-   | O | move forward & move right |
-   | m | move back & rotate right |
-   | . | move back & rotate left |
-   | M | move back & move left |
-   | > | move back & move right |
-   | t | stand |
+   | Key | Movement | Key | Movement |
+   | :----: | :----: | :----: | :----: |
+   | k / K | stop | u | move forward & rotate left |
+   | i / I | move forward | o | move forward & rotate right |
+   | , / < | move back | U | move forward & move left |
+   | J | move left | O | move forward & move right |
+   | L | move right | m | move back & rotate right |
+   | j | rotate left | . | move back & rotate left |
+   | l | rotate right |  M | move back & move left |
+   | t | stand | > | move back & move right |
    | b | crouch |
         
 ## Adding new assets
