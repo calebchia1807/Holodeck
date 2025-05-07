@@ -74,7 +74,8 @@ python connect_to_unity --scene <SCENE_JSON_FILE_PATH>
 6. Press the play button (the triangle) in Unity to load the scene. No actions can be made as it is waiting for ROS2 commands, see below.
 
 ## ROS2 Integration
-**Ensure that ROS2 Foxy is installed for this to run.**
+#### Ensure that ROS2 Foxy is installed for this to run.
+
 Run the following to build the package:
 ```bash
 cd ~/Holodeck
@@ -93,7 +94,7 @@ There are the following functions in this package:
    ```bash
    ros2 topic pub -r 50 cmd_vel geometry_msgs/msg/Twist '{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}'
    ```
-   #### linear is in m/s; randian is in degrees/s (can be changed to randian/s, refer to [this ros node](src/simulator_ros/simulator_ros/unity_nav.py).
+   #### linear is in m/s; angular is in degrees/s (can be changed to randian/s, refer to [this ros node](src/simulator_ros/simulator_ros/unity_nav.py).
    | Parameter | Negative /cmd_vel | Positive /cmd_vel |
    | :----: | :----: | :----: |
    | linear x | move front | move back |
@@ -107,6 +108,7 @@ There are the following functions in this package:
    ``` bash
    ros2 run teleop_twist_keyboard teleop_twist_keyboard
    ```
+   #### linear is in m/s; angular is in degrees/s (can be changed to randian/s, refer to [this ros node](src/simulator_ros/simulator_ros/unity_nav.py).
    | Key | Movement | Key | Movement |
    | :----: | :----: | :----: | :----: |
    | k / K | stop | u | move forward & rotate left |
