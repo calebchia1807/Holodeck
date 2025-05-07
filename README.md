@@ -108,26 +108,23 @@ There are the following functions in this package:
    #### CAN USE TELEOP_TWIST_KEYBOARD TO CONTROL AS WELL
    | Key | Movement |
    | :----: | :----: |
-   | k/K | stop |
-   | i/I | move forward |
-   | ,/< | move back |
+   | k / K | stop |
+   | i / I | move forward |
+   | , / < | move back |
    | J | move left |
-    L: move right
-    j: rotate left
-    l: rotate right
-    
-    u: move forward & rotate left
-    o: move forward & rotate right
-    U: move forward & move left
-    O: move forward & move right
-    
-    m: move back & rotate right
-    .: move back & rotate left
-    M: move back & move left
-    >: move back & move right
-    
-    t: stand
-    b: crouch
+   | L | move right |
+   | j | rotate left |
+   | l | rotate right |
+   | u | move forward & rotate left |
+   | o | move forward & rotate right |
+   | U | move forward & move left |
+   | O | move forward & move right |
+   | m | move back & rotate right |
+   | . | move back & rotate left |
+   | M | move back & move left |
+   | > | move back & move right |
+   | t | stand |
+   | b | crouch |
         
 ## Adding new assets
 Please refer to this repo [ObjaTHOR](https://github.com/calebchia1807/objathor)
