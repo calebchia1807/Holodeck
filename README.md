@@ -18,7 +18,7 @@
 ## Requirements
 - Ubuntu 20.04 (Unity 2020.3.25f1 only runs on this Ubuntu version)
 - Conda Environment
-- C++ Compiler (```bash sudo apt install build-essential```)
+- C++ Compiler (```sudo apt install build-essential```)
 - ROS2 Foxy
 - Holodeck is based on [AI2-THOR](https://ai2thor.allenai.org/ithor/documentation/#requirements).
 
