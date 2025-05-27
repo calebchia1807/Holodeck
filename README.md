@@ -23,7 +23,7 @@
 - Holodeck is based on [AI2-THOR](https://ai2thor.allenai.org/ithor/documentation/#requirements).
 
 ## Installation
-Clone the repo and change directory into it.
+Clone the repo and **change directory** into it.
 ```bash
 git clone https://github.com/calebchia1807/Holodeck.git
 ```
