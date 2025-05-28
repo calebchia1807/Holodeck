@@ -51,9 +51,9 @@ python -m objathor.dataset.download_features --version 2023_09_23
 by default these will save to `~/.objathor-assets/...`, you can change this director by specifying the `--path` argument.  If you change the `--path`, you'll need to set the `OBJAVERSE_ASSETS_DIR` environment variable to the path where the assets are stored when you use Holodeck.
 
 ## Usage
-Run the following command to generate a new environment:
+Run the following command in root of repo to generate a new environment:
 ```bash
-python holodeck/main.py --query "<ROOM DESIRED>" --openai_api_key <OPENAI_API_KEY>
+python main.py --query "<ROOM DESIRED>" --openai_api_key <OPENAI_API_KEY>
 ```
 - ```<ROOM DESIRED>```: Change to a query statement of room type you desire (example: "an apartment with 2 rooms")
 - System uses `gpt-4o-2024-05-13`, **so please ensure you have access to an OPENAI API KEY.**
