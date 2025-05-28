@@ -75,7 +75,7 @@ pip install Flask==2.0.1
 4. Load `ai2thor/unity` as project in Unity and open `ai2thor/unity/Assets/Scenes/Procedural/Procedural.unity`.
 5. In the terminal, run [this python script](connect_to_unity.py):
 ```bash
-python connect_to_unity --scene <SCENE_JSON_FILE_PATH>
+python connect_to_unity.py --scene <SCENE_JSON_FILE_PATH>
 ```
 6. Press the play button (the triangle) in Unity to load the scene. No actions can be made as it is waiting for ROS2 commands, see below.
 
